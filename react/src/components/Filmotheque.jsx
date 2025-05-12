@@ -1,29 +1,48 @@
 import React, { useEffect, useState } from "react";
-import FilmCard from "../components/FilmCard";
-import { Link } from "react-router-dom";
+import axios from "axios";
 
-function Filmotheque() {
+const ListeFilms = () => {
   const [films, setFilms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [erreur, setErreur] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/liste/films`)
-      .then((response) => response.json())
-      .then((data) => setFilms(data))
-      .catch((error) =>
-        console.error("Erreur lors de la récupération des films :", error)
-      );
+    axios
+      .get("http://localhost:3000/liste/films")
+      .then((response) => {
+        setFilms(response.data);
+        setLoading(false);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        setErreur(error.message);
+        setLoading(false);
+      });
   }, []);
 
+  if (loading) return <p>Chargement des films...</p>;
+  if (erreur) return <p>Erreur : {erreur}</p>;
+
   return (
-    <div className="page p-6">
-      <h1 className="text-2xl font-bold mb-4"><div><Link to="/intro" className="btn accueil"> ⬅️ Accueil</Link></div>Films de 2022</h1>
-      <section className="filmContainer">
-        {films.map((film) => (
-          <FilmCard key={film.id} film={film} />
+    <div>
+      <h2>Liste des Films</h2>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+        {films.map((film, index) => (
+          <div key={index}>
+            <h2>{film.name}</h2>
+            {film.tmdbDetails?.poster_path ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w200${film.tmdbDetails.poster_path}`}
+                alt={film.tmdbDetails.title}
+              />
+            ) : (
+              <p>Aucune image disponible</p>
+            )}
+          </div>
         ))}
-      </section>
+      </div>
     </div>
   );
-}
+};
 
-export default Filmotheque;
+export default ListeFilms;

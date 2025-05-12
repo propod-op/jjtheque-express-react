@@ -2,7 +2,7 @@ import "./assets/css/app.css";
 import {Routes, Route, BrowserRouter as Router} from "react-router-dom";
 
 import IntroductionPage from "./components/Introduction";
-import Filmotheque from './components/Filmotheque';
+import ListeFilms from './components/Filmotheque';
 
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/intro" element={<IntroductionPage />} />
-        <Route path="/films" element={<Filmotheque />} />
+        <Route path="/films" element={<ListeFilms />} />
       </Routes>
     </Router>
   );
