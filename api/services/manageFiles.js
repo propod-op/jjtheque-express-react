@@ -10,63 +10,57 @@ const router = express.Router();
 require("dotenv").config();
 const folders = require("./folders");
 
-const path = require("path");
-const MOVIES_DIR = "/mnt/usbshare1/2021";
 const fs = require("fs").promises;
+const path = require("path");
 
 const extensions = ["mkv", "mp4", "avi"];
+const ignoredExtensions = new Set();
+
 const keywordsToRemove = ["MULTi", "1080p", "h265", "h264"];
 const trailingCharsToRemove = [".", "-"];
-const ignoredExtensions = new Set();
 const extRegex = new RegExp(`\\.(${extensions.join("|")})$`, "i");
 
 
-async function listFilesSpecDirectories() {
+async function recursiveGetFilesInDirectories(dir) {
   try {
     const entries = await fs.readdir(dir, { withFileTypes: true });
-
 
     const results = await Promise.all(
       entries.map(async (entry) => {
         const fullPath = path.join(dir, entry.name);
+        const isSerie = /S\d{2}/i.test(entry.name);
+        const filmType = isSerie ? 'serie' : 'film';
+
         if (entry.isDirectory()) {
           return {
             name: entry.name,
-            type: "directory",
-            name: entry.name,
             path: fullPath,
+            filmType,
           };
         } else {
           return {
             name: entry.name,
             type: "file",
             path: fullPath,
+            filmType,
           };
         }
       })
     );
 
-    //return results;
+    return results;
+
   } catch (err) {
     console.error("Erreur en lisant le dossier:", err);
-    throw err; // Propager l'erreur pour la gestion ultérieure
-  }
-}
-
-async function listFilesAndDirectories(req, res) {
-  try {
-    const result = await listFilesRecursive(MOVIES_DIR);
-    res.json(result);
-  } catch (err) {
-    console.error("Erreur en lisant les dossiers récursivement:", err);
-    res.status(500).send("Erreur serveur");
+    throw err;
   }
 }
 
 
-async function listFilesRecursive(dir) {
+async function simpleGetFilesInDirectories(dir) {
   try {
     const entries = await fs.readdir(dir, { withFileTypes: true });
+
 
     const results = await Promise.all(
       entries.map(async (entry) => {
@@ -76,7 +70,6 @@ async function listFilesRecursive(dir) {
             name: entry.name,
             type: "directory",
             path: fullPath,
-            children: await listFilesRecursive(fullPath), // récursivité ici
           };
         } else {
           return {
@@ -87,7 +80,6 @@ async function listFilesRecursive(dir) {
         }
       })
     );
-
     return results;
   } catch (err) {
     console.error("Erreur en lisant le dossier:", err);
@@ -95,32 +87,8 @@ async function listFilesRecursive(dir) {
   }
 }
 
-async function listFilesAndDirectories(req, res) {
-  try {
-    const result = await listFilesRecursive(MOVIES_DIR);
-    res.json(result);
-  } catch (err) {
-    console.error("Erreur en lisant les dossiers récursivement:", err);
-    res.status(500).send("Erreur serveur");
-  }
-}
 
-// Fonction récursive pour extraire les fichiers avec la bonne extension
-function filterFilesByExtension(tree) {
-  let results = [];
-
-  for (const node of tree) {
-    if (node.type === "file" && extRegex.test(node.name)) {
-      results.push(node);
-    } else if (node.type === "directory" && Array.isArray(node.children)) {
-      results = results.concat(filterFilesByExtension(node.children));
-    }
-  }
-
-  return results;
-}
-
-function cleanFileName(fileName) {
+function cleanFilmName(fileName) {
   // 1. Gestion de l'extension
   const extMatch = fileName.match(/\.(\w{2,5})$/i);
   if (extMatch) {
@@ -146,6 +114,9 @@ function cleanFileName(fileName) {
   // 4. Remplacement des points par des espaces
   name = name.replace(/\./g, " ");
 
+  //remplacement d une par d'une
+  name = name.replace("d une", "d'une");
+
   // 5. Suppression des caractères de fin
   const trailingRegex = new RegExp(
     `[${trailingCharsToRemove.map((c) => "\\" + c).join("")}]+$`,
@@ -157,28 +128,8 @@ function cleanFileName(fileName) {
   return name.trim().replace(/\s{2,}/g, " ");
 }
 
-async function getFilmsNames(path) {
-  try {
-    console.log("1. On commence par lire les dossiers...");
-   
-    const allFiles = await listFilesRecursive(path);
-    const filteredFiles = filterFilesByExtension(allFiles);
-    
-    const cleanedFiles = filteredFiles
-      .map((file) => ({ ...file, name: cleanFileName(file.name) }))
-      .filter((file) => file.name !== null);
-    return cleanedFiles;
-  } catch (err) {
-    console.error("Erreur lors de la lecture des fichiers :", err);
-    throw err; // pas de res ici
-  }
-}
-
 module.exports = {
-  listFilesSpecDirectories,
-  listFilesRecursive,
-  filterFilesByExtension,
-  cleanFileName,
-  listFilesAndDirectories,
-  getFilmsNames,
+  simpleGetFilesInDirectories,
+  recursiveGetFilesInDirectories,
+  cleanFilmName
 };
