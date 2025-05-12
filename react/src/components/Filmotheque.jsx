@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "../assets/css/filmotheque.css"
 
 const ListeFilms = () => {
   const [films, setFilms] = useState([]);
@@ -24,11 +25,12 @@ const ListeFilms = () => {
   if (erreur) return <p>Erreur : {erreur}</p>;
 
   return (
-    <div>
-      <h2>Liste des Films</h2>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+    <section className="films">
+      <div className="guest-zone">GUEST !</div>
+
+      <div className="scroll-zone">
         {films.map((film, index) => (
-          <div key={index}>
+          <div className="card" key={index}>
             <h2>{film.name}</h2>
             {film.tmdbDetails?.poster_path ? (
               <img
@@ -41,7 +43,7 @@ const ListeFilms = () => {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
