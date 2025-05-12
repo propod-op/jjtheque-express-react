@@ -25,6 +25,7 @@ async function getFilmDetails(filmName) {
     params: {
       query: filmName,
       api_key: apiKey,
+      language: "fr-FR",
     }
   });
   return response.data.results[0]; // ou le format approprié de la réponse

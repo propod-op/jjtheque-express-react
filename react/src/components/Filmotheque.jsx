@@ -6,6 +6,7 @@ const ListeFilms = () => {
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState(null);
+  const [filmSelectionne, setFilmSelectionne] = useState(null); // nouvel état
 
   useEffect(() => {
     axios
@@ -26,11 +27,27 @@ const ListeFilms = () => {
 
   return (
     <section className="films">
-      <div className="guest-zone">GUEST !</div>
+      <div className="guest-zone">
+        {filmSelectionne ? (
+          <div className="guest-card">
+            <h2>{filmSelectionne.name}</h2>
+            {filmSelectionne.tmdbDetails?.overview && (
+              <p>{filmSelectionne.tmdbDetails.overview}</p>
+            )}
+          </div>
+        ) : (
+          <p>GUEST !</p>
+        )}
+      </div>
 
       <div className="scroll-zone">
         {films.map((film, index) => (
-          <div className="card" key={index}>
+          <div
+            className="card"
+            key={index}
+            onClick={() => setFilmSelectionne(film)} // gestion du clic
+            style={{ cursor: "pointer" }} // indication visuelle
+          >
             <h2>{film.name}</h2>
             {film.tmdbDetails?.poster_path ? (
               <img
@@ -48,3 +65,4 @@ const ListeFilms = () => {
 };
 
 export default ListeFilms;
+
