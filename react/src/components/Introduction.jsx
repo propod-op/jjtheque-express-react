@@ -6,9 +6,10 @@ function IntroductionPage() {
       <h1 className="text-2xl font-bold mb-4">Bienvenue (logo animé qui depote</h1>
       <div className="grid">
 
-      <Link to="/films/2021" className="btn">2021</Link>
-      <Link to="/films/2022" className="btn">2022</Link>
-      <Link to="/films/2023" className="btn">2023</Link>
+      <Link to="/films" className="btn">Films</Link>
+      <Link to="/series" className="btn">Séries</Link>
+      <Link to="/animes" className="btn">Dessins animés</Link>
+      <Link to="/documentaires" className="btn">Documentaires</Link>
       </div>
     </section>
   );

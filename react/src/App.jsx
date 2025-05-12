@@ -1,5 +1,4 @@
 import "./assets/css/app.css";
-import { React, useState } from "react";
 import {Routes, Route, BrowserRouter as Router} from "react-router-dom";
 
 import IntroductionPage from "./components/Introduction";
@@ -11,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/intro" element={<IntroductionPage />} />
-        <Route path="/films/:annee" element={<Filmotheque />} />
+        <Route path="/films" element={<Filmotheque />} />
       </Routes>
     </Router>
   );

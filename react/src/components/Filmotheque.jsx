@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import FilmCard from "../components/FilmCard";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Filmotheque() {
-  const { annee } = useParams();
   const [films, setFilms] = useState([]);
 
   useEffect(() => {
-    fetch(`http://192.168.1.5:3000/films/${annee}`)
+    fetch(`http://localhost:3000/liste/films`)
       .then((response) => response.json())
       .then((data) => setFilms(data))
       .catch((error) =>

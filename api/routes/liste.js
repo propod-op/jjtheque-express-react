@@ -62,7 +62,7 @@ async function getFilms(req, res){
     })
     .filter(file => file !== null);
     console.log("listArray : ", listArray);
-      res.status(200).json(JSON.stringify(listArray));
+    res.status(200).json(listArray);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: "Erreur lors de la récupération des films" });
