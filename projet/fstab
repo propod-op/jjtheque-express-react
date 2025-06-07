@@ -1,0 +1,7 @@
+192.168.1.60:/volumeUSB2/usbshare2-2/SynoTV     /media/SynoTV nfs defaults,user,auto,noatime,intr 0 0
+192.168.1.60:/volumeUSB2/usbshare2-2/pcTV       /media/pcTV nfs defaults,user,auto,noatime,intr 0 0
+192.168.1.60:/volumeUSB2/usbshare2-2            /media/SynoSeriesTV nfs defaults,user,auto,noatime,intr 0 0
+192.168.1.60:/volumeUSB1/usbshare               /media/Films nfs defaults,user,auto,noatime,intr 0 0
+192.168.1.60:/volumeUSB3/usbshare               /media/Synonew nfs defaults,user,auto,noatime,intr 0 0
+//192.168.1.60/homes                            /media/Synogidy cifs credentials=/root/.smbcredentials,username=napo261,password=tcabkp2 0 0
+

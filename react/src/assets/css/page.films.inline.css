@@ -1,0 +1,225 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+}
+
+section.introduction .grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem; /* espace entre les cards, ajuste selon ton besoin */
+  padding: 1rem;
+  width: 100%;
+  height: auto;
+}
+
+section.introduction .grid a.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: black;
+  height: 4rem;
+  width: 20rem;
+
+  border-radius: 0.5rem;
+  background-color: #f5f5f5;
+}
+
+section.introduction .grid a.btn:hover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: white;
+  height: 4rem;
+
+  border-radius: 0.5rem;
+  background-color: red;
+}
+
+section.films {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch; /* alignement au centre ou sur toute la largeur */
+
+  width: 100%;
+  height: 100vh;
+}
+
+div.guest-zone {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  width: 100%;
+  height: 50%;
+}
+
+div.guest-card {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%; /* Assurez-vous que la hauteur ne dépasse pas celle du parent */
+  border-radius: 0.5rem;
+}
+
+div.guest-card div.left {
+  width: 70%;
+  height: calc(100% - 4rem);
+  padding: 1rem;
+
+  border: 2px solid grey;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  margin: 2rem;
+  background-color: #333333;
+}
+
+div.guest-card div.left h2{
+  font-family: "Archivo Narrow", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size:2.5rem;
+  margin:0;
+}
+
+div.guest-card div.left p.overview{
+  text-align: left;
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 1.3rem;;
+}
+
+div.guest-card div.right {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding: 2rem;
+  width: auto;
+  height: 100%;
+}
+div.guest-card div.right img {
+  width: 100%;
+  height: 100%;
+  border: 3px solid rgb(161, 125, 26);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+div.title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+div.scroll-zone {
+  display: flex;
+  flex-direction: row; /* Assure que les éléments sont alignés horizontalement */
+  justify-content: flex-start;
+  align-items:center; /* Assure que les éléments prennent toute la hauteur du conteneur */
+
+  width: 100%; /* ou une largeur spécifique si nécessaire */
+
+  overflow-x: auto; /* Permet le scroll horizontal */
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+
+  scrollbar-width: large; /* Pour Firefox */
+  gap: 4rem; /* Espace entre les éléments (remplace margin dans .card) */
+
+  padding: 1rem 2rem;
+}
+
+
+div.scroll-zone button.card {
+  all: unset;
+  width: auto;
+}
+
+div.scroll-zone button.card:hover {
+  cursor: pointer;
+}
+
+div.scroll-zone button.card img {
+  border: 3px solid rgb(161, 125, 26);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+div.scroll-zone button.card h2 {
+  width: 100%;
+  height: 4rem;
+
+
+  font-family: "Archivo Narrow", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+
+  line-height: 1.25;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* A METTRE DANS UN FICHIER ... */
+
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+
+.layer-blur {
+  pointer-events: none;
+  position: fixed;
+  width: 100vw;
+  height: 50vh;
+  bottom:0;
+  left:0;
+  overflow: hidden;
+}
+
+
+.layer-blur::before,
+.layer-blur::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 14rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.layer-blur::before {
+  left: 0;
+  background: linear-gradient(to right, #242424 0%, #242424 40%, transparent 60%, transparent 100%);
+}
+
+.layer-blur::after {
+  right: 0;
+background: linear-gradient(to left, #242424 0%, #242424 40%, transparent 60%, transparent 100%);
+
+}
+

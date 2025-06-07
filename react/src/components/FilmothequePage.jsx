@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../assets/css/filmotheque.css"
+import "../assets/css/page.films.inline.css"; // Assurez-vous que le chemin est correct
 
 const ListeFilms = () => {
   const [films, setFilms] = useState([]);
@@ -10,7 +10,7 @@ const ListeFilms = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/liste/films")
+      .get("http://192.168.1.5:3000/liste/films")
       .then((response) => {
         setFilms(response.data);
         setLoading(false);
@@ -27,26 +27,44 @@ const ListeFilms = () => {
 
   return (
     <section className="films">
+
       <div className="guest-zone">
         {filmSelectionne ? (
+          
           <div className="guest-card">
-            <h2>{filmSelectionne.name}</h2>
-            {filmSelectionne.tmdbDetails?.overview && (
-              <p>{filmSelectionne.tmdbDetails.overview}</p>
-            )}
+            <div className="left">
+              <div className="title-container">
+                <h2>{filmSelectionne.name}</h2>
+               
+               {/*<h3>{filmSelectionne.genres[0].name}</h3>*/}
+                <p>Note : {filmSelectionne.tmdbDetails.vote_average}</p></div>
+              {filmSelectionne.tmdbDetails?.overview && (
+                <p className="overview">{filmSelectionne.tmdbDetails.overview}</p>
+              )}
+            </div>
+            <div className="right">
+              <img
+                src={`https://image.tmdb.org/t/p/w300${filmSelectionne.tmdbDetails.poster_path}`}
+                alt={filmSelectionne.tmdbDetails.title}
+              />
+            </div>
+
           </div>
+
         ) : (
-          <p>GUEST !</p>
+          <p>GUEST A AFFICHER SI AUCUN SELECTIONNE</p>
         )}
       </div>
 
       <div className="scroll-zone">
+        <div className="layer-blur"></div>
         {films.map((film, index) => (
-          <div
+          <button
             className="card"
-            key={index}
-            onClick={() => setFilmSelectionne(film)} // gestion du clic
-            style={{ cursor: "pointer" }} // indication visuelle
+            key={film.tmdbDetails?.id || `film-${index}`}
+            onClick={() => setFilmSelectionne(film)}
+            onKeyPress={(e) => e.key === 'Enter' && setFilmSelectionne(film)}
+            aria-label={`Sélectionner ${film.name}`}
           >
             <h2>{film.name}</h2>
             {film.tmdbDetails?.poster_path ? (
@@ -57,7 +75,7 @@ const ListeFilms = () => {
             ) : (
               <p>Aucune image disponible</p>
             )}
-          </div>
+          </button>
         ))}
       </div>
     </section>
@@ -65,4 +83,3 @@ const ListeFilms = () => {
 };
 
 export default ListeFilms;
-

@@ -17,9 +17,10 @@ const {
 } = require("../services/manageFiles");
 
 const FOLDERS = require("../services/folders");
-const apiKey = "3eb6f05b82040357b17cf87c3e2d10d2";
+const apiKey = "3eb6f05b82040357b17cf87c3e2d10d2"; /* APIKEY from TMDB */
 const language = "fr-FR";
 
+/* Obtient les information pour 1 film */
 async function getFilmDetails(filmName) {
   const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
     params: {
@@ -31,6 +32,7 @@ async function getFilmDetails(filmName) {
   return response.data.results[0]; // ou le format approprié de la réponse
 }
 
+/* Obtient la liste de tous les fichiers dans les dossiers */
 async function getAll (req, res){
   try {
     let listArray = [];
@@ -50,6 +52,7 @@ async function getAll (req, res){
   }
 }
 
+/* Obtient la liste des films en ajoutant les détails TMDB */
 async function getFilms(req, res){
   try {
     let listArray = [];
@@ -83,8 +86,6 @@ async function getFilms(req, res){
       })
     );
 
-    //console.log("filmsWithDetails : ", filmsWithDetails);
-    //console.log(filmsWithDetails.slice(0, 5));
     res.status(200).json(filmsWithDetails);
 
   } catch (error) {
