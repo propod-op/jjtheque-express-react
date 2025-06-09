@@ -43,7 +43,7 @@ async function getAll (req, res){
       listArray.push(files);
     }
     listArray = listArray.flat(); // ← aplatit d'un niveau
-    console.log("listArray : ", listArray);
+
 
     res.status(200).json(JSON.stringify(listArray));
   } catch (error) {
@@ -62,8 +62,10 @@ async function getFilms(req, res){
       if (folder.type === "films") {
         const files = await recursiveGetFilesInDirectories(folder.path);
         listArray.push(...files);
+        console.log("[getFilms] - files : " ,files);
       }
     }
+    console.log("[getFilms] - film count : " ,listArray.length);
 
     // Nettoyage des noms de films
     const seenNames = new Set();
@@ -78,14 +80,14 @@ async function getFilms(req, res){
     })
     .filter(file => file !== null);
    
-    // Compléter les informations TMDB
+    // Compléter avec les informations TMDB
     const filmsWithDetails = await Promise.all(
       listArray.map(async (file) => {
         const tmdbDetails = await getFilmDetails(file.name);
         return { ...file, tmdbDetails };
       })
     );
-
+    //console.log("filmsWithDetails",filmsWithDetails[0]);
     res.status(200).json(filmsWithDetails);
 
   } catch (error) {
