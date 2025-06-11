@@ -134,22 +134,28 @@ div.scroll-zone {
   justify-content: flex-start;
   align-items:center; /* Assure que les éléments prennent toute la hauteur du conteneur */
 
-  width: 100%; /* ou une largeur spécifique si nécessaire */
+  width: 100vw; /* ou une largeur spécifique si nécessaire */
 
   overflow-x: auto; /* Permet le scroll horizontal */
   overflow-y: hidden;
   flex-wrap: nowrap;
 
   scrollbar-width: large; /* Pour Firefox */
-  gap: 4rem; /* Espace entre les éléments (remplace margin dans .card) */
+  gap: 1rem; /* Espace entre les éléments (remplace margin dans .card) */
 
-  padding: 1rem 2rem;
+  padding: 1rem 10rem;
 }
 
 
 div.scroll-zone button.card {
   all: unset;
   width: auto;
+  min-width:15rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 div.scroll-zone button.card:hover {
@@ -179,7 +185,32 @@ div.scroll-zone button.card h2 {
   justify-content: center;
 }
 
-/* A METTRE DANS UN FICHIER ... */
+/* Style pour la scrollbar */
+
+/* Modifie l'épaisseur de la scrollbar */
+div.scroll-zone::-webkit-scrollbar {
+  width: 2rem; 
+  height:4rem;
+}
+
+/* Style pour la piste de la scrollbar (l'arrière-plan) */
+div.scroll-zone::-webkit-scrollbar-track {
+  background: rgba(226, 174, 32, 0.1); /* Couleur de la piste */
+  background-image: url('');
+}
+
+/* Style pour le pouce de la scrollbar (la partie que vous déplacez) */
+div.scroll-zone::-webkit-scrollbar-thumb {
+  background-image: url('../images/slider.svg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  height:4rem;
+  width:4rem;
+  cursor: pointer;
+}
+
 
 button:hover {
   border-color: #646cff;
@@ -194,8 +225,8 @@ button:focus-visible {
   pointer-events: none;
   position: fixed;
   width: 100vw;
-  height: 50vh;
-  bottom:0;
+  height: calc(50vh - 15rem);
+  bottom:10rem;
   left:0;
   overflow: hidden;
 }
@@ -207,19 +238,19 @@ button:focus-visible {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 14rem;
+  width: 20rem;
   pointer-events: none;
   z-index: 1;
 }
 
 .layer-blur::before {
   left: 0;
-  background: linear-gradient(to right, #242424 0%, #242424 40%, transparent 60%, transparent 100%);
+  background: linear-gradient(to right, rgb(36, 36, 36) 0%, rgb(36, 36, 36) 10%, transparent 80%, transparent 80%);
 }
 
 .layer-blur::after {
   right: 0;
-background: linear-gradient(to left, #242424 0%, #242424 40%, transparent 60%, transparent 100%);
+background: linear-gradient(to left, rgb(36, 36, 36) 0%, rgb(36, 36, 36) 10%, transparent 100%, transparent 20%);
 
 }
 

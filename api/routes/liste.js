@@ -18,10 +18,10 @@ const {
 
 const FOLDERS = require("../services/folders");
 const apiKey = "3eb6f05b82040357b17cf87c3e2d10d2"; /* APIKEY from TMDB */
-const language = "fr-FR";
 
-/* Obtient les information pour 1 film */
-async function getFilmDetails(filmName) {
+
+/* Obtient les informations pour un film */
+async function API_TMDB_getFilmDetails(filmName) {
   const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
     params: {
       query: filmName,
@@ -32,7 +32,19 @@ async function getFilmDetails(filmName) {
   return response.data.results[0]; // ou le format approprié de la réponse
 }
 
-/* Obtient la liste de tous les fichiers dans les dossiers */
+/* Obtient les informations pour les acteurs d'un film */
+async function API_TMDB_getFilmDetails(filmName) {
+  const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
+    params: {
+      query: filmName,
+      api_key: apiKey,
+      language: "fr-FR",
+    }
+  });
+  return response.data.results[0]; // ou le format approprié de la réponse
+}
+
+/* Obtient la liste de tous les fichiers de manière récursive (inactif) */
 async function getAll (req, res){
   try {
     let listArray = [];
@@ -52,20 +64,20 @@ async function getAll (req, res){
   }
 }
 
-/* Obtient la liste des films en ajoutant les détails TMDB */
+/* Obtient la liste des noms de films + ajoute les détails TMDB */
 async function getFilms(req, res){
   try {
     let listArray = [];
 
-    // Lecture des fichiers des dossiers de type "films"
+    // Tableau de dossiers : dossiers de type "films" (récursif)
     for(const folder of FOLDERS) {
       if (folder.type === "films") {
-        const files = await recursiveGetFilesInDirectories(folder.path);
+        let files = await recursiveGetFilesInDirectories(folder.path);
         listArray.push(...files);
-        console.log("[getFilms] - files : " ,files);
       }
     }
-    console.log("[getFilms] - film count : " ,listArray.length);
+
+    console.log("Fichiers récupérés :", listArray);
 
     // Nettoyage des noms de films
     const seenNames = new Set();
@@ -74,20 +86,27 @@ async function getFilms(req, res){
       const cleanedName = cleanFilmName(file.name);
       if (cleanedName && !seenNames.has(cleanedName)) {
         seenNames.add(cleanedName);
-        return { ...file, name: cleanedName };
+        return { file, name: cleanedName };
       }
       return null;
     })
     .filter(file => file !== null);
    
+    //ici les noms de films sont nettoyés.
+
     // Compléter avec les informations TMDB
     const filmsWithDetails = await Promise.all(
       listArray.map(async (file) => {
-        const tmdbDetails = await getFilmDetails(file.name);
-        return { ...file, tmdbDetails };
+        const tmdbMovie = await API_TMDB_getFilmDetails(file.name);
+        // Ici il se peut que le film ne soit pas trouvé dans la base de TMDB, il faut gérer un retour vide
+        if (!tmdbMovie) {
+          console.warn(`No movie infos: ${file.name}`);
+          return { ...file, tmdbMovie: null };
+        }
+        return { ...file, ...tmdbMovie,...tmdbMovie.tmdbDetails };
       })
     );
-    //console.log("filmsWithDetails",filmsWithDetails[0]);
+
     res.status(200).json(filmsWithDetails);
 
   } catch (error) {

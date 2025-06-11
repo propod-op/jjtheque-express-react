@@ -37,15 +37,15 @@ const ListeFilms = () => {
                 <h2>{filmSelectionne.name}</h2>
                
                {/*<h3>{filmSelectionne.genres[0].name}</h3>*/}
-                <p>Note : {filmSelectionne.tmdbDetails.vote_average}</p></div>
-              {filmSelectionne.tmdbDetails?.overview && (
-                <p className="overview">{filmSelectionne.tmdbDetails.overview}</p>
+                <p>Note : {filmSelectionne.vote_average}</p></div>
+              {filmSelectionne?.overview && (
+                <p className="overview">{filmSelectionne.overview}</p>
               )}
             </div>
             <div className="right">
               <img
-                src={`https://image.tmdb.org/t/p/w300${filmSelectionne.tmdbDetails.poster_path}`}
-                alt={filmSelectionne.tmdbDetails.title}
+                src={`https://image.tmdb.org/t/p/w300${filmSelectionne.poster_path}`}
+                alt={filmSelectionne.title}
               />
             </div>
 
@@ -61,16 +61,16 @@ const ListeFilms = () => {
         {films.map((film, index) => (
           <button
             className="card"
-            key={film.tmdbDetails?.id || `film-${index}`}
+            key={film.id || `film-${index}`}
             onClick={() => setFilmSelectionne(film)}
             onKeyPress={(e) => e.key === 'Enter' && setFilmSelectionne(film)}
             aria-label={`Sélectionner ${film.name}`}
           >
             <h2>{film.name}</h2>
-            {film.tmdbDetails?.poster_path ? (
+            {film.poster_path ? (
               <img
-                src={`https://image.tmdb.org/t/p/w200${film.tmdbDetails.poster_path}`}
-                alt={film.tmdbDetails.title}
+                src={`https://image.tmdb.org/t/p/w200${film.poster_path}`}
+                alt={film.title}
               />
             ) : (
               <p>Aucune image disponible</p>

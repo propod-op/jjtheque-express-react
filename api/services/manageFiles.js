@@ -36,6 +36,7 @@ async function recursiveGetFilesInDirectories(dir) {
             name: entry.name,
             path: fullPath,
             filmType,
+            folder: dir
           };
         } else {
           return {
@@ -43,6 +44,7 @@ async function recursiveGetFilesInDirectories(dir) {
             type: "file",
             path: fullPath,
             filmType,
+            folder: dir
           };
         }
       })
