@@ -14,25 +14,29 @@ const axios = require("axios");
 const {
   recursiveGetFilesInDirectories,
   cleanFilmName,
+  convertRateToStars
 } = require("../services/manageFiles");
 
 const FOLDERS = require("../services/folders");
 const apiKey = "3eb6f05b82040357b17cf87c3e2d10d2"; /* APIKEY from TMDB */
 
-
 /* Obtient les informations pour un film */
-async function API_TMDB_getFilmDetails(filmName) {
-  const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
+async function API_TMDB_getFilmCredits(id) {
+ const response = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits`, {
     params: {
-      query: filmName,
       api_key: apiKey,
       language: "fr-FR",
     }
   });
-  return response.data.results[0]; // ou le format approprié de la réponse
+  
+  if(!response.data || response.data.length === 0) {
+    console.warn(`No credits found for movie ID: ${id}`);
+    return null; 
+  }
+  return response.data;
 }
 
-/* Obtient les informations pour les acteurs d'un film */
+/* Obtient les informations pour un film */
 async function API_TMDB_getFilmDetails(filmName) {
   const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
     params: {
@@ -67,21 +71,19 @@ async function getAll (req, res){
 /* Obtient la liste des noms de films + ajoute les détails TMDB */
 async function getFilms(req, res){
   try {
-    let listArray = [];
+    let filmNamesArray = [];
 
-    // Tableau de dossiers : dossiers de type "films" (récursif)
+    // Tableau des films (fichiers dans le dossier FOLDERS)
     for(const folder of FOLDERS) {
       if (folder.type === "films") {
         let files = await recursiveGetFilesInDirectories(folder.path);
-        listArray.push(...files);
+        filmNamesArray.push(...files);
       }
     }
 
-    console.log("Fichiers récupérés :", listArray);
-
     // Nettoyage des noms de films
     const seenNames = new Set();
-    listArray = listArray
+    filmNamesArray = filmNamesArray
     .map(file => {
       const cleanedName = cleanFilmName(file.name);
       if (cleanedName && !seenNames.has(cleanedName)) {
@@ -92,18 +94,22 @@ async function getFilms(req, res){
     })
     .filter(file => file !== null);
    
-    //ici les noms de films sont nettoyés.
-
     // Compléter avec les informations TMDB
     const filmsWithDetails = await Promise.all(
-      listArray.map(async (file) => {
-        const tmdbMovie = await API_TMDB_getFilmDetails(file.name);
+      filmNamesArray.map(async (file) => {
+        const resultDetails = await API_TMDB_getFilmDetails(file.name);
         // Ici il se peut que le film ne soit pas trouvé dans la base de TMDB, il faut gérer un retour vide
-        if (!tmdbMovie) {
+
+        if (!resultDetails) {
           console.warn(`No movie infos: ${file.name}`);
-          return { ...file, tmdbMovie: null };
+          return { ...file, resultDetails: null };
         }
-        return { ...file, ...tmdbMovie,...tmdbMovie.tmdbDetails };
+
+        let resultCredits = await API_TMDB_getFilmCredits(resultDetails.id);
+        let names = resultCredits.cast.map(actor => actor.name).slice(0,10);
+        names.push('...');
+        console.log('Credits', names);
+        return { ...file, ...resultDetails, ...resultDetails.tmdbDetails, actors: names, vote_count: convertRateToStars(resultDetails.vote_count), vote_average: convertRateToStars(resultDetails.vote_average) };
       })
     );
 

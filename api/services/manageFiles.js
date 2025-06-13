@@ -130,8 +130,18 @@ function cleanFilmName(fileName) {
   return name.trim().replace(/\s{2,}/g, " ");
 }
 
+const convertRateToStars = (rating) => {
+  if (rating === 0) return "Aucun";
+  if (rating >= 8) return "⭐⭐⭐⭐⭐";
+  if (rating >= 6) return "⭐⭐⭐⭐";
+  if (rating >= 4) return "⭐⭐⭐";
+  if (rating >= 2) return "⭐⭐";
+  return "⭐";
+};
+
 module.exports = {
   simpleGetFilesInDirectories,
   recursiveGetFilesInDirectories,
-  cleanFilmName
+  cleanFilmName,
+  convertRateToStars
 };

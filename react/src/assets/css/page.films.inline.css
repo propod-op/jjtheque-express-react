@@ -101,6 +101,15 @@ div.guest-card div.left p.overview{
   font-size: 1.3rem;;
 }
 
+div.guest-card div.left p.actors{
+  text-align: left;
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 1.1rem;;
+}
+
 div.guest-card div.right {
   display: flex;
   flex-direction: row;

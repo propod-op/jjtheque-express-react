@@ -35,11 +35,12 @@ const ListeFilms = () => {
             <div className="left">
               <div className="title-container">
                 <h2>{filmSelectionne.name}</h2>
-               
-               {/*<h3>{filmSelectionne.genres[0].name}</h3>*/}
                 <p>Note : {filmSelectionne.vote_average}</p></div>
               {filmSelectionne?.overview && (
-                <p className="overview">{filmSelectionne.overview}</p>
+                <p className="overview">{filmSelectionne.overview.slice(0,600)}  {filmSelectionne.overview.length > 300 && '...'}</p>
+              )}
+              {filmSelectionne?.actors && (
+                <p className="actors">{filmSelectionne.actors.join(', ')}</p>
               )}
             </div>
             <div className="right">
