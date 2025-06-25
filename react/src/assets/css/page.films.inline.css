@@ -20,9 +20,6 @@ div.guest-zone {
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-
-  width: 100%;
-  height: 50%;
 }
 
 div.guest-card {
