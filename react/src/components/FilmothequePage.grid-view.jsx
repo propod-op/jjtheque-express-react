@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../assets/css/page.films.inline.css"; // Assurez-vous que le chemin est correct
+import "../assets/css/page.films.grid.css"; // Assurez-vous que le chemin est correct
 
-const ListeFilms = () => {
+const GridViewFilms = () => {
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState(null);
@@ -24,15 +24,23 @@ const ListeFilms = () => {
 
   if (loading) return <p>Chargement des films...</p>;
   if (erreur) return <p>Erreur : {erreur}</p>;
+  // Fonction pour masquer le guest (fermeture)
+  
+  const showGuest = () => {
+    setFilmSelectionne(null);
+  };
+
 
   return (
-    <section className="films">
-
-      <div className="guest-zone">
+    <>
+      <div className="close-guest" onClick={showGuest}>X</div>
+      <div className="grid-title">LISTE DES FILMS 2023</div>
+      <div className="guest-zone" style={{ display: filmSelectionne ? "flex" : "none" }}>
         {filmSelectionne ? (
           
           <div className="guest-card">
-            <div className="left">
+            
+            <div className="block-1">
               <div className="title-container">
                 <h2>{filmSelectionne.name}</h2>
                 <p>Note : {filmSelectionne.vote_average}</p></div>
@@ -43,7 +51,8 @@ const ListeFilms = () => {
                 <p className="actors">{filmSelectionne.actors.join(', ')}</p>
               )}
             </div>
-            <div className="right">
+
+            <div className="block-2">
               <img
                 src={`https://image.tmdb.org/t/p/w300${filmSelectionne.poster_path}`}
                 alt={filmSelectionne.title}
@@ -56,15 +65,13 @@ const ListeFilms = () => {
           <p>GUEST A AFFICHER SI AUCUN SELECTIONNE</p>
         )}
       </div>
-
-      <div className="scroll-zone">
-        <div className="layer-blur"></div>
+    <section className="films">
+      <div className="grid-zone">
         {films.map((film, index) => (
           <button
-            className="card"
+            className="grid-item"
             key={film.id || `film-${index}`}
             onClick={() => setFilmSelectionne(film)}
-            onKeyPress={(e) => e.key === 'Enter' && setFilmSelectionne(film)}
             aria-label={`Sélectionner ${film.name}`}
           >
             <h2>{film.name}</h2>
@@ -80,7 +87,8 @@ const ListeFilms = () => {
         ))}
       </div>
     </section>
+    </>
   );
 };
 
-export default ListeFilms;
+export default GridViewFilms;
