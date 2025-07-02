@@ -1,17 +1,17 @@
-.page.accueil{
+section.page.accueil{
 
 }
 
-.page.accueil .flex-container {
+section.page.accueil .flex-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: auto;
     
 }
 
-.page.accueil .flex-container a{
+section.page.accueil .flex-container a{
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -24,4 +24,10 @@
     border-radius: 5px;
     transition: background-color 0.3s ease;
     
+}
+
+section.page.accueil img{
+    width: 100px;
+    height: auto;
+    margin: 10px;
 }

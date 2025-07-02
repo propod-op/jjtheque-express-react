@@ -288,6 +288,7 @@ section.films {
 }
 
 /* TABLETTE */
+/*
 @media screen and (min-width: 481px) and (max-width: 1024px) {
   .guest-zone div.block-content {
     max-width: 100%;
@@ -297,9 +298,10 @@ section.films {
     font-size: 2.2rem;
   }
 }
+  */
 
 /* PC */
-@media screen and (min-width: 1025px) {
+@media screen and (min-width: 481px) {
   .guest-zone div.block-content {
     flex-direction: column;
     justify-content: flex-start;
